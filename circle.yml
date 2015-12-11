@@ -10,7 +10,7 @@ dependencies:
   pre:
     - sudo apt-get update
     - sudo apt-get install build-essential rsync cpio python unzip bc wget curl git ssh scons libmozjs-dev
-    - sudo rm -f /usr/bin/gcc && ln -s /usr/bin/gcc-4.8 /usr/bin/gcc && rm -f /usr/bin/g++ && ln -s /usr/bin/g++-4.8 /usr/bin/g++
+    - sudo rm -f /usr/bin/gcc && sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc && sudo rm -f /usr/bin/g++ && sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
   override:
     - docker info
 
