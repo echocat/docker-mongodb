@@ -54,23 +54,23 @@ function build-buildroot {
 			exit 0
 		fi
 		execute cd "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}"
-#		log INFO "Start building of buildroot. This could take a while without any output. Output be gerenated on errors and every $SLEEP_BETWEEN_TAILS with the last $LINES_OF_TAILS lines."
+		log INFO "Start building of buildroot. This could take a while without any output. Output be gerenated on errors and every $SLEEP_BETWEEN_TAILS with the last $LINES_OF_TAILS lines."
 
-#		make "BR2_EXTERNAL=${SOURCE_DIRECTORY}/packages" "MONGODB_VERSION=${MONGODB_VERSION}" &> .build.log &
-#		local makePid=$!
-#
-#		print-tail-every .build.log &
-#		local tailPid=$!
-#
-#		wait $makePid
-#		local errorCode=$?
-#		kill $tailPid
-#
-#		if [ $errorCode -ne 0 ]; then
-#			tail -n 50 .build.log 1>&2
-#			fail "While building buildroot an error was produced: $errorCode"
-#		fi
-#		log INFO "Build of buildroot done!"
+		make "BR2_EXTERNAL=${SOURCE_DIRECTORY}/packages" "MONGODB_VERSION=${MONGODB_VERSION}" &> .build.log &
+		local makePid=$!
+
+		print-tail-every .build.log &
+		local tailPid=$!
+
+		wait $makePid
+		local errorCode=$?
+		kill $tailPid
+
+		if [ $errorCode -ne 0 ]; then
+			tail -n 50 .build.log 1>&2
+			fail "While building buildroot an error was produced: $errorCode"
+		fi
+		log INFO "Build of buildroot done!"
 
 		store-buildroot-artifacts
 	fi

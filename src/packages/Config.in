@@ -1,2 +1,1 @@
 source "$BR2_EXTERNAL/mongodb/Config.in"
-source "$BR2_EXTERNAL/mongo-tools/Config.in"
