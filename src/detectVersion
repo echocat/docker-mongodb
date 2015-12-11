@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. "`dirname \"${0}\"`/common"
+
+checkForExecutable git
+checkForExecutable docker
+
+currentBranch="`git branch | grep \"^\* \" | sed 's/^\* //g'`"
+if [ -z "${currentBranch}" ]; then
+	fail "Could not determinate current branch."
+fi
+
+execute rm -f "${BUILD_DIRECTORY}/version"
+execute rm -f "${BUILD_DIRECTORY}/mongodb-version"
+execute rm -f "${BUILD_DIRECTORY}/buildroot-version"
+
+if echo "${currentBranch}" | grep 'v[0-9][0-9]*\(\.[0-9][0-9]*\)*' > /dev/null; then
+	log info "Current branch: ${currentBranch}"
+	execute mkdir -p "${BUILD_DIRECTORY}"
+	execute echo "${currentBranch}" | sed 's/^v//g' > "${BUILD_DIRECTORY}/version"
+	execute cp -f "${BUILD_DIRECTORY}/version" "${BUILD_DIRECTORY}/mongodb-version"
+else
+	fail "No valid branch name: ${currentBranch}"
+fi
+
