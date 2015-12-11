@@ -10,8 +10,7 @@ dependencies:
   pre:
     - sudo apt-get update
     - sudo apt-get install build-essential rsync cpio python unzip bc wget curl git ssh scons libmozjs-dev
-    - sudo apt-get remove gcc-4.6 gcc-4.7 gcc-4.8 g++-4.9 g++-4.7 g++-4.9
-    - sudo apt-get install gcc-4.8 g++-4.8
+    - sudo rm -f /usr/bin/gcc && ln -s /usr/bin/gcc-4.8 /usr/bin/gcc && rm -f /usr/bin/g++ && ln -s /usr/bin/g++-4.8 /usr/bin/g++
   override:
     - docker info
 
