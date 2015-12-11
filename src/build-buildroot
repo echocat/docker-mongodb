@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BUILDROOT_VERSION="`cat \"${BUILD_DIRECTORY}/buildroot-version\"`"
+MONGODB_VERSION="`cat \"${BUILD_DIRECTORY}/mongodb-version\"`"
 SLEEP_BETWEEN_TAILS=5m
 LINES_OF_TAILS=20
 
@@ -24,8 +25,21 @@ function prepare-buildroot-directory {
 }
 
 function store-buildroot-artifacts {
-	execute mkdir -p "${IMAGES_DIRECTORY}"
-	execute cp -f "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/images/rootfs.tar.gz" "${IMAGES_DIRECTORY}/rootfs.tar.gz"
+	checkForExecutable tar
+	checkForExecutable find
+
+	execute rm -rf "${BUILD_DIRECTORY}/docker-intermediate-image"
+	execute rm -rf "${BUILD_DIRECTORY}/docker-image"
+	
+	execute mkdir -p "${BUILD_DIRECTORY}/docker-intermediate-image"
+	execute cd "${BUILD_DIRECTORY}/docker-intermediate-image"
+	execute tar -xzf "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/images/rootfs.tar.gz"
+
+	execute find "${BUILD_DIRECTORY}/docker-intermediate-image" -exec "${SOURCE_DIRECTORY}/build-buildroot-processRootFs" "{}" "${BUILD_DIRECTORY}/docker-intermediate-image" "${BUILD_DIRECTORY}/docker-depedency-image/root" "${BUILD_DIRECTORY}/docker-image" \;
+	execute cd "${BUILD_DIRECTORY}/docker-image"
+	execute "${SOURCE_DIRECTORY}/build-buildroot-postFileSystemBuild"
+
+	execute tar -czf "${IMAGES_DIRECTORY}/rootfs.tar.gz" .
 }
 
 function build-buildroot {
@@ -40,23 +54,23 @@ function build-buildroot {
 			exit 0
 		fi
 		execute cd "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}"
-		log INFO "Start building of buildroot. This could take a while without any output. Output be gerenated on errors and every $SLEEP_BETWEEN_TAILS with the last $LINES_OF_TAILS lines."
+#		log INFO "Start building of buildroot. This could take a while without any output. Output be gerenated on errors and every $SLEEP_BETWEEN_TAILS with the last $LINES_OF_TAILS lines."
 
-		make &> .build.log &
-		local makePid=$!
-
-		print-tail-every .build.log &
-		local tailPid=$!
-
-		wait $makePid
-		local errorCode=$?
-		kill $tailPid
-
-		if [ $errorCode -ne 0 ]; then
-			tail -n 50 .build.log 1>&2
-			fail "While building buildroot an error was produced: $errorCode"
-		fi
-		log INFO "Build of buildroot done!"
+#		make "BR2_EXTERNAL=${SOURCE_DIRECTORY}/packages" "MONGODB_VERSION=${MONGODB_VERSION}" &> .build.log &
+#		local makePid=$!
+#
+#		print-tail-every .build.log &
+#		local tailPid=$!
+#
+#		wait $makePid
+#		local errorCode=$?
+#		kill $tailPid
+#
+#		if [ $errorCode -ne 0 ]; then
+#			tail -n 50 .build.log 1>&2
+#			fail "While building buildroot an error was produced: $errorCode"
+#		fi
+#		log INFO "Build of buildroot done!"
 
 		store-buildroot-artifacts
 	fi

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+. "`dirname \"${0}\"`/common"
+
+if [ -z "${1}" ] || [ -z "${2}" ] || [ -z "${3}" ] || [ -z "${4}" ]; then
+	fail "Usage: ${0} <sourceFile> <sourceBaseDiractory> <baseDirectoryToCompareWith> <targetBaseDirectory>"
+fi
+if [ ! -d "${2}" ]; then
+	fail "Source base directory \"${2}\" does not exist."
+fi
+if [ ! -d "${3}" ]; then
+	fail "Base directory to compare \"${3}\" does not exist."
+fi
+if [ ! -d "${3}" ] && [ -e "${4}" ]; then
+	fail "Target base directory \"${4}\" does exist but is not a directory."
+fi
+
+if [ -e "${1}" ]; then
+	if [ ! -d "${1}" ]; then
+		sourceFile="`readlink -f \"${1}\"`"
+		sourceBaseDirectory="`readlink -f \"${2}\"`"
+		compareBaseDirectory="`readlink -f \"${3}\"`"
+		targetBaseDirectory="`readlink -f \"${4}\"`"
+
+		lengthOfSourceDirectory=${#sourceBaseDirectory}
+		bareFile="${sourceFile:lengthOfSourceDirectory+1}"
+
+		compareFile="${compareBaseDirectory}/${bareFile}"
+
+		if [ ! -e "${compareFile}" ]; then
+			targetFile="${targetBaseDirectory}/${bareFile}"
+			targetDirectory="`dirname \"${targetFile}\"`"
+			execute mkdir -p "${targetDirectory}"
+			execute cp -f "${sourceFile}" "${targetFile}"
+		fi
+	fi
+fi

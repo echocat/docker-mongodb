@@ -4,6 +4,7 @@
 
 checkForExecutable git
 checkForExecutable docker
+checkForExecutable find
 
 currentBranch="`git branch | grep \"^\* \" | sed 's/^\* //g'`"
 if [ -z "${currentBranch}" ]; then
@@ -22,4 +23,20 @@ if echo "${currentBranch}" | grep 'v[0-9][0-9]*\(\.[0-9][0-9]*\)*' > /dev/null; 
 else
 	fail "No valid branch name: ${currentBranch}"
 fi
+
+dockerDependency="`cat \"${BASE_DIRECTORY}/Dockerfile\" | grep \"^\s*FROM\s\" | sed 's/^\s*FROM\s\(.\{1,\}\)\s*\$/\1/g'`"
+if [ -z "${dockerDependency}" ]; then
+	fail "Could not determinate docker dependency."
+fi
+
+execute docker pull "${dockerDependency}"
+
+execute rm -rf "${BUILD_DIRECTORY}/docker-depedency-image"
+execute mkdir -p "${BUILD_DIRECTORY}/docker-depedency-image/root"
+execute cd "${BUILD_DIRECTORY}/docker-depedency-image"
+execute docker save "${dockerDependency}" | tar -x
+execute cd "${BUILD_DIRECTORY}/docker-depedency-image/root"
+execute find "${BUILD_DIRECTORY}/docker-depedency-image" -name "layer.tar" -exec tar -xf "{}" \;
+
+execute cp -f "${BUILD_DIRECTORY}/docker-depedency-image/root/usr/lib/sysinfo/echocat/nano/buildroot.version" "${BUILD_DIRECTORY}/buildroot-version"
 

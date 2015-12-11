@@ -4,6 +4,8 @@ MAINTAINER "echocat" contact@echocat.org
 
 ADD images/rootfs.tar.gz /
 
-ENV PATH "/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+EXPOSE 27017 27018 27019 28017
 
-CMD ["bash","--login"]
+CMD [ "mongod", \
+	"--dbpath", "/var/mongodb/db" \
+]

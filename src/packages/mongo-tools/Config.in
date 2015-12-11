@@ -1,0 +1,3 @@
+config BR2_PACKAGE_MONGODB
+	bool "mongodb"
+	depends on BR2_i386 || BR2_x86_64

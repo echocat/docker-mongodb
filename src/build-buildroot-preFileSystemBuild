@@ -2,6 +2,7 @@
 . "`dirname \"${0}\"`/common"
 
 rm -rf output/target/dev
+rm -f output/target/bin/dash
 
 rm -rf output/target/etc/network
 rm -f output/target/etc/fstab
@@ -33,3 +34,4 @@ execute cp -f "${BUILD_DIRECTORY}/buildroot-version"  "output/target/usr/lib/sys
 execute cp -f "${BUILD_DIRECTORY}/version"            "output/target/usr/lib/sysinfo/${ORGANIZATION}/${PROJECT}/version"
 execute git rev-parse HEAD >                          "output/target/usr/lib/sysinfo/${ORGANIZATION}/${PROJECT}/revision"
 execute date +'%F %R:%S%z' >                          "output/target/usr/lib/sysinfo/${ORGANIZATION}/${PROJECT}/date"
+
