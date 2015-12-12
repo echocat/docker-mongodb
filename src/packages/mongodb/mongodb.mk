@@ -1,4 +1,4 @@
-MONGODB_VERSION = 3.0.7
+MONGODB_VERSION = HAVE_TO_BE_SET
 MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
 MONGODB_SITE = https://fastdl.mongodb.org/src/
 MONGODB_LICENSE = AGPL-3.0
@@ -14,8 +14,12 @@ MONGODB_SCONS_OPTS = \
 	--debug=findlibs \
 	CPPPATH="$(STAGING_DIR)/usr/include" \
 	LIBPATH="$(STAGING_DIR)/usr/lib" \
+	CC="$(CC)" \
+	CXX="$(CXX)" \
+	CFLAGS="$(CFLAGS)" \
+	CXXFLAGS="$(CXXFLAGS)" \
 	--disable-warnings-as-errors \
-	"--prefix=$(TARGET_DIR)"
+	--prefix"=$(TARGET_DIR)"
 
 #MONGODB_SCONS_OPTS = \
 #	--debug=stacktrace\

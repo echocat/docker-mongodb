@@ -10,7 +10,6 @@ dependencies:
   pre:
     - sudo apt-get update
     - sudo apt-get install build-essential rsync cpio python unzip bc wget curl git ssh scons libmozjs-dev
-    - sudo rm -f /usr/bin/gcc && sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc && sudo rm -f /usr/bin/g++ && sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
   override:
     - docker info
 
@@ -22,7 +21,7 @@ test:
 
 deployment:
   hub:
-    branch: /(master|v.*)/
+    branch: /v.*/
     commands:
       - docker login -e $DOCKERHUB_EMAIL -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
       - src/deploy
