@@ -14,10 +14,10 @@ MONGODB_SCONS_OPTS = \
 	--debug=findlibs \
 	CPPPATH="$(STAGING_DIR)/usr/include" \
 	LIBPATH="$(STAGING_DIR)/usr/lib" \
-	CC="$(CC)" \
-	CXX="$(CXX)" \
-	CFLAGS="$(CFLAGS)" \
-	CXXFLAGS="$(CXXFLAGS)" \
+	CC="$(TARGET_CC)" \
+	CXX="$(TARGET_CXX)" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CXXFLAGS)" \
 	--disable-warnings-as-errors \
 	--prefix"=$(TARGET_DIR)"
 
