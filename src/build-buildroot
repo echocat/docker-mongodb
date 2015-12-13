@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BUILDROOT_VERSION="`cat \"${BUILD_DIRECTORY}/buildroot-version\"`"
+ECHOCAT_NANO_VERSION="`cat \"${BUILD_DIRECTORY}/echocat-nano-version\"`"
 MONGODB_VERSION="`cat \"${BUILD_DIRECTORY}/mongodb-version\"`"
 SLEEP_BETWEEN_TAILS=5m
 LINES_OF_TAILS=20
@@ -19,9 +20,14 @@ function prepare-buildroot-directory {
 	execute cd "${BUILD_DIRECTORY}"
 	checkForExecutable wget
 	checkForExecutable tar
-	execute wget -nv "http://buildroot.uclibc.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -O "buildroot-${BUILDROOT_VERSION}.tar.gz"
+	execute wget -q "http://buildroot.uclibc.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz" -O "buildroot-${BUILDROOT_VERSION}.tar.gz"
 	execute tar -xzf "buildroot-${BUILDROOT_VERSION}.tar.gz"
 	execute cp -f "${SOURCE_DIRECTORY}/buildroot.config" "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/.config"
+
+	execute wget -q "https://github.com/echocat/docker-nano/releases/download/v${ECHOCAT_NANO_VERSION}/toolchain.tar.gz" -O "${BUILD_DIRECTORY}/toolchain.tar.gz"
+	execute mkdir -p "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/host"
+	execute cd "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/host"
+	execute tar -xzf "${BUILD_DIRECTORY}/toolchain.tar.gz"
 }
 
 function store-buildroot-artifacts {

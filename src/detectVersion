@@ -38,5 +38,6 @@ execute docker save "${dockerDependency}" | tar -x
 execute cd "${BUILD_DIRECTORY}/docker-depedency-image/root"
 execute find "${BUILD_DIRECTORY}/docker-depedency-image" -name "layer.tar" -exec tar -xf "{}" \;
 
+execute cp -f "${BUILD_DIRECTORY}/docker-depedency-image/root/usr/lib/sysinfo/echocat/nano/version" "${BUILD_DIRECTORY}/echocat-nano-version"
 execute cp -f "${BUILD_DIRECTORY}/docker-depedency-image/root/usr/lib/sysinfo/echocat/nano/buildroot.version" "${BUILD_DIRECTORY}/buildroot-version"
 
