@@ -39,7 +39,9 @@ function store-buildroot-artifacts {
 	
 	execute mkdir -p "${BUILD_DIRECTORY}/docker-intermediate-image"
 	execute cd "${BUILD_DIRECTORY}/docker-intermediate-image"
-	execute tar -xzf "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/images/rootfs.tar.gz"
+	local username=`whoami`
+	execute sudo tar -xzf "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}/output/images/rootfs.tar.gz"
+	execute sudo chown -R $username "${BUILD_DIRECTORY}/docker-intermediate-image"
 
 	execute find "${BUILD_DIRECTORY}/docker-intermediate-image" -exec "${SOURCE_DIRECTORY}/build-buildroot-processRootFs" "{}" "${BUILD_DIRECTORY}/docker-intermediate-image" "${BUILD_DIRECTORY}/docker-depedency-image/root" "${BUILD_DIRECTORY}/docker-image" \;
 	execute cd "${BUILD_DIRECTORY}/docker-image"
