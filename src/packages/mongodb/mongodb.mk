@@ -18,6 +18,7 @@ MONGODB_SCONS_OPTS = \
 	CXX="$(TARGET_CXX)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CXXFLAGS="$(TARGET_CXXFLAGS)" \
+	DO_NOT_SHOW_IS_ROOT_WARNINGS="true" \
 	--disable-warnings-as-errors \
 	--prefix"=$(TARGET_DIR)"
 
