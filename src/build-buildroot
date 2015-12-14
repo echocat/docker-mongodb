@@ -45,6 +45,7 @@ function store-buildroot-artifacts {
 	execute cd "${BUILD_DIRECTORY}/docker-image"
 	execute "${SOURCE_DIRECTORY}/build-buildroot-postFileSystemBuild"
 
+	execute mkdir -p "${IMAGES_DIRECTORY}"
 	execute tar -czf "${IMAGES_DIRECTORY}/rootfs.tar.gz" .
 }
 
@@ -62,10 +63,10 @@ function build-buildroot {
 		execute cd "${BUILD_DIRECTORY}/buildroot-${BUILDROOT_VERSION}"
 		log INFO "Start building of buildroot. This could take a while without any output. Output be gerenated on errors and every $SLEEP_BETWEEN_TAILS with the last $LINES_OF_TAILS lines."
 
-		make "BR2_EXTERNAL=${SOURCE_DIRECTORY}/packages" "MONGODB_VERSION=${MONGODB_VERSION}" &> .build.log &
+		make "BR2_EXTERNAL=${SOURCE_DIRECTORY}/packages" "MONGODB_VERSION=${MONGODB_VERSION}" &> "${BUILD_DIRECTORY}/build-buildroot.log" &
 		local makePid=$!
 
-		print-tail-every .build.log &
+		print-tail-every "${BUILD_DIRECTORY}/build-buildroot.log" &
 		local tailPid=$!
 
 		wait $makePid
