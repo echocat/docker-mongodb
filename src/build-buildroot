@@ -74,7 +74,7 @@ function build-buildroot {
 		kill $tailPid
 
 		if [ $errorCode -ne 0 ]; then
-			tail -n 50 .build.log 1>&2
+			tail -n 50 "${BUILD_DIRECTORY}/build-buildroot.log" 1>&2
 			fail "While building buildroot an error was produced: $errorCode"
 		fi
 		log INFO "Build of buildroot done!"
