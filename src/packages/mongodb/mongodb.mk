@@ -1,6 +1,6 @@
 MONGODB_VERSION = HAVE_TO_BE_SET
 MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
-MONGODB_SITE = https://fastdl.mongodb.org/src/
+MONGODB_SITE = https://fastdl.mongodb.org/src
 MONGODB_LICENSE = AGPL-3.0
 MONGODB_LICENSE_FILES = GNU-AGPL-3.0.txt
 MONGODB_DEPENDENCIES = host-scons host-pkgconf host-python host-bzip2 host-zlib
